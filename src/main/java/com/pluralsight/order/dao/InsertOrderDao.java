@@ -63,8 +63,8 @@ public class InsertOrderDao {
                                 int count = detailsPS.executeUpdate();
                                 if (count != 1) {
                                     con.rollback();
+                                    orderId = -1;
                                 }
-                                orderId = -1;
                             }
                         }
                         con.commit();
@@ -93,7 +93,7 @@ public class InsertOrderDao {
         PreparedStatement ps = con.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
         ps.setLong(1, orderDto.getCustomerId());
         ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-        ps.setString(2, String.valueOf(OrderStatus.CREATED));
+        ps.setString(3, String.valueOf(OrderStatus.CREATED));
 
         return ps;
     }
