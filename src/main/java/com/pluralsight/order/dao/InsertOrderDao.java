@@ -46,7 +46,7 @@ public class InsertOrderDao {
              PreparedStatement ps = createOrderPreparedStatement(con, orderDto)
         ) {
             con.setAutoCommit(false);
-            ps.executeQuery();
+            ps.executeUpdate();
 
             try (ResultSet result = ps.getGeneratedKeys()) {
                 if (result != null) {
@@ -67,7 +67,7 @@ public class InsertOrderDao {
                                 orderId = -1;
                             }
                         }
-                        ps.executeQuery();
+                       con.commit();
                     }
                 }
             } catch (SQLException ex) {
@@ -91,9 +91,8 @@ public class InsertOrderDao {
      */
     private PreparedStatement createOrderPreparedStatement(Connection con, OrderDto orderDto) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
-
-        ps.setLong(1, orderDto.getOrderId());
-        ps.setDate(2, Date.valueOf(LocalDate.now()));
+        ps.setLong(1, orderDto.getCustomerId());
+        ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
         ps.setString(2, String.valueOf(OrderStatus.CREATED));
 
         return ps;
