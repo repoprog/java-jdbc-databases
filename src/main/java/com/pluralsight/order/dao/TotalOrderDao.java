@@ -30,10 +30,17 @@ public class TotalOrderDao {
     public BigDecimal getTotalAllPaidOrders(ParamsDto paramsDto) {
         BigDecimal result = null;
 
-        try (Connection con = null;
+        try (Connection con = database.getConnection();
              CallableStatement cs = createCallableStatement(con, paramsDto.getCustomerId())
         ) {
-
+            cs.executeUpdate();
+            try (ResultSet rs = cs.executeQuery()) {
+                if (rs != null) {
+                    result = rs.getBigDecimal("customer_id");
+                }
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex);
+            }
         } catch (SQLException ex) {
             ExceptionHandler.handleException(ex);
         }
@@ -43,13 +50,14 @@ public class TotalOrderDao {
 
     /**
      * Creates a CallableStatement object to get the total of the orders
-     * @param con Connnection object
+     * @param con        Connnection object
      * @param customerId ID of the customer to set on the PreparedStatement
      * @return A PreparedStatement object
      * @throws SQLException In case of an error
      */
     private CallableStatement createCallableStatement(Connection con, long customerId) throws SQLException {
-
-        return null;
+        CallableStatement cs = con.prepareCall(query);
+        cs.setLong(1, customerId);
+        return cs;
     }
 }
