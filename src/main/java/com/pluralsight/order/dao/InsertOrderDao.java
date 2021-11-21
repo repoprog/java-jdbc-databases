@@ -60,14 +60,14 @@ public class InsertOrderDao {
 
                             try (PreparedStatement detailsPS =
                                          createOrderDetailPreparedStatement(con, orderDetailDto)) {
-                                orderId = detailsPS.executeUpdate();
-                                if (orderId != 1) {
+                                int count = detailsPS.executeUpdate();
+                                if (count != 1) {
                                     con.rollback();
                                 }
                                 orderId = -1;
                             }
                         }
-                       con.commit();
+                        con.commit();
                     }
                 }
             } catch (SQLException ex) {
