@@ -7,6 +7,8 @@ import com.pluralsight.order.util.ExceptionHandler;
 import com.pluralsight.order.util.OrderStatus;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -90,8 +92,8 @@ public class InsertOrderDao {
     private PreparedStatement createOrderPreparedStatement(Connection con, OrderDto orderDto) throws SQLException {
         PreparedStatement ps = con.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
 
-        ps.setLong(1, );
-        ps.setDate(2, new Date(new Timestamp()));
+        ps.setLong(1, orderDto.getOrderId());
+        ps.setDate(2, Date.valueOf(LocalDate.now()));
         ps.setString(2, String.valueOf(OrderStatus.CREATED));
 
         return ps;
