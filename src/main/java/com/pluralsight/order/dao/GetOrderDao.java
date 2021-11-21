@@ -36,11 +36,12 @@ public class GetOrderDao {
              PreparedStatement ps = createPreparedStatement(con, paramsDto.getOrderId());
              ResultSet rs = createResultSet(ps)
         ) {
-            while (rs.next()) {
-                orderDto.setOrderId(rs.getLong("orderId"));
-                orderDto.setCustomerId(rs.getLong("customerId"));
-                orderDto.setDate(rs.getDate("date"));
-                orderDto.setStatus(rs.getString("status"));
+            if (rs.next()) {
+                orderDto = new OrderDto();
+                orderDto.setOrderId(rs.getLong("order_Id"));
+                orderDto.setCustomerId(rs.getLong("order_customer_Id"));
+                orderDto.setDate(rs.getDate("order_date"));
+                orderDto.setStatus(rs.getString("order_status"));
             }
         } catch (SQLException ex) {
             ExceptionHandler.handleException(ex);
